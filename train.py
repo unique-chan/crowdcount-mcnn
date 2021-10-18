@@ -107,7 +107,8 @@ for epoch in range(start_step, end_step+1):
         gt_data = blob['gt_density']
         density_map = net(im_data, gt_data)
         loss = net.loss
-        train_loss += loss.data[0]
+        # train_loss += loss.data[0]
+        train_loss += loss.item()
         step_cnt += 1
         optimizer.zero_grad()
         loss.backward()
