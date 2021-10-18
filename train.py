@@ -2,6 +2,8 @@ import os
 import torch
 import numpy as np
 import sys
+sys.path.insert(0, './src')
+
 
 from src.crowd_count import CrowdCounter
 from src import network
@@ -94,7 +96,7 @@ t.tic()
 
 data_loader = ImageDataLoader(train_path, train_gt_path, shuffle=True, gt_downsample=True, pre_load=True)
 data_loader_val = ImageDataLoader(val_path, val_gt_path, shuffle=False, gt_downsample=True, pre_load=True)
-best_mae = sys.maxint
+best_mae = -1
 
 for epoch in range(start_step, end_step+1):    
     step = -1
@@ -133,7 +135,7 @@ for epoch in range(start_step, end_step+1):
         network.save_net(save_name, net)     
         #calculate error on the validation dataset 
         mae,mse = evaluate_model(save_name, data_loader_val)
-        if mae < best_mae:
+        if mae > best_mae:
             best_mae = mae
             best_mse = mse
             best_model = '{}_{}_{}.h5'.format(method,dataset_name,epoch)
